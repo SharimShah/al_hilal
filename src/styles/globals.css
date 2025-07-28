@@ -1,0 +1,154 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "swiper/css";
+@import "swiper/css/pagination";
+@import "swiper/css/navigation";
+@import "swiper/css/thumbs";
+@import "swiper/css/free-mode";
+@import "react-international-phone/style.css";
+:root {
+  --kcred: rgb(218, 41, 28);
+  --kcredlight: #c41a24;
+  --scrollbarbac: #e5e7eb;
+  --cblack: #101a24;
+  --cyellow: #ddd100;
+}
+@layer base {
+  h1 {
+    @apply text-2xl;
+  }
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-xl;
+  }
+  button {
+    @apply text-[14px] font-semibold;
+  }
+  p {
+    @apply text-[17px] font-[600] tracking-wider text-[#555555];
+  }
+  li {
+    @apply text-[#555555] leading-normal text-sm font-normal;
+  }
+}
+@layer components {
+  .heading {
+    @apply max-w-2xl text-3xl font-bold text-kcred text-center;
+  }
+  .btn-red {
+    @apply font-sans duration-150 px-7 py-2 rounded-lg font-[500] text-[16px] bg-kcred text-white tracking-wider border border-kcred hover:border-cblack hover:bg-white hover:text-cblack;
+  }
+  .act-btn {
+    @apply font-sans duration-150 px-7 py-2 rounded-lg font-[500] text-[16px] border border-cblack text-cblack hover:border-kcred bg-transparent hover:bg-kcred hover:text-white tracking-wider;
+  }
+  .container-fluid {
+    @apply w-full md:px-10 sm:px-5 px-2;
+  }
+  .Ccontainer {
+    @apply max-w-[1000px] px-[3rem];
+  }
+  .kcgcontainer {
+    @apply max-w-[1170px] mx-auto lg:px-10 md:px-10 sm:px-6 px-4;
+  }
+}
+@layer utilities {
+  .custom-scrollbar {
+    @apply scrollbar-thin scrollbar-thumb-kcred scrollbar-track-scrollbarbac;
+  }
+}
+
+.menus-slide .swiper-button-disabled {
+  opacity: 0.5 !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+}
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  font-size: 25px;
+  color: white;
+}
+.swiper-button-prevhehe:after,
+.swiper-button-nexthehe:after {
+  font-size: 14px;
+  color: white;
+}
+.mySwiper .swiper-pagination-bullet {
+  background-color: white; /* Default dot color */
+  opacity: 0.8; /* Default dot opacity */
+  transition: opacity 0.3s ease;
+}
+html {
+  scroll-behavior: smooth;
+}
+.WhatsappBtn {
+  z-index: 1000;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+  position: relative;
+  /* overflow: hidden; */
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+}
+
+.svgContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  backdrop-filter: blur(0px);
+  letter-spacing: 0.8px;
+  border-radius: 10px;
+  transition: all 0.3s;
+  border: 1px solid rgba(156, 156, 156, 0.466);
+}
+
+.BG {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  background: #25d366;
+  z-index: -1;
+  border-radius: 10px;
+  pointer-events: none;
+  transition: all 0.3s;
+}
+
+.WhatsappBtn:hover .BG {
+  transform: rotate(35deg);
+  transform-origin: bottom;
+}
+
+.WhatsappBtn:hover .svgContainer {
+  background-color: rgba(156, 156, 156, 0.466);
+  backdrop-filter: blur(4px);
+}
+.react-international-phone-input {
+  width: 100%;
+  border: none !important;
+}
+.react-international-phone-country-selector-button {
+  height: var(--react-international-phone-height, 42px);
+  padding: 5px;
+}
+.react-international-phone-input-container .react-international-phone-input {
+  height: var(--react-international-phone-height, 42px);
+  font-size: var(--react-international-phone-font-size, 15px);
+}

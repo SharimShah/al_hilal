@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+Disallow: /private/
+Disallow: /guestcheckout/
+Disallow: /submit-your-complaint/

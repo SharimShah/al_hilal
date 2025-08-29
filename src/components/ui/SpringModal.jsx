@@ -28,7 +28,7 @@ export const SpringModal = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={closeModal} // Close modal when clicking outside
-          className="bg-slate-900/20 backdrop-blur fixed inset-0 z-[150] grid place-items-center overflow-y-scroll cursor-pointer custom-scrollbar"
+          className="bg-slate-900/20 backdrop-blur fixed inset-0 z-[150] grid plce-items-center overflow-hidden"
         >
           <motion.div
             onClick={(e) => e.stopPropagation()} // Prevent backdrop click from closing the modal

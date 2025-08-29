@@ -1,37 +1,29 @@
-"use client";
-import dynamic from "next/dynamic";
-import Image from "next/image";
-const Card = dynamic(() => import("@/components/ui/Card"));
-import { useState } from "react";
-export default function Deals({ data, imgsrc, id }) {
-  const cardsQuantity = 9;
-  const [visibleCards, setVisibleCards] = useState(cardsQuantity); // Initial number of visible cards
-  const loadMoreCards = () => {
-    setVisibleCards((prevVisibleCards) => prevVisibleCards + cardsQuantity); // Increase by 3 cards
-  };
+import Card from "@/components/ui/Card";
+export default function Deals({ data, name, id }) {
   return (
-    <>
-      <div className="container-fluid lg:p-6 md:p-0 p-5" id={id}>
-        <Image
-          src={imgsrc}
-          width={1400}
-          alt=""
-          className="object-contain w-full my-10"
-          height={50}
-        />
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xxl:grid-cols-4 gap-8">
-          {data?.slice(0, visibleCards).map((item) => (
-            <Card item={item} key={item?.id} />
-          ))}
-        </div>
-        {visibleCards < data?.length && (
-          <div className="text-center mt-6">
-            <button className="btn-red" onClick={loadMoreCards}>
-              Load More
-            </button>
-          </div>
-        )}
+    <div className="py-10 px-4 sm:px-6 lg:px-12 kcgcontainer" id={id}>
+      {/* Header Banner */}
+      <div className="bg-kcgreen rounded-xl text-white text-center md:py-20 py-10 md:mb-12 mb-5">
+        <h1 className="text-2xl md:text-5xl font-semibold tracking-wide capitalize">
+          {name}
+        </h1>
       </div>
-    </>
+
+      {/* Deal Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {data?.map((item, i) => (
+          <Card
+            key={i}
+            id={item?.id}
+            image={item?.image}
+            slug={item?.slug}
+            title={item?.name}
+            desc={item?.description}
+            price={item?.price}
+            oldPrice={900}
+          />
+        ))}
+      </div>
+    </div>
   );
 }

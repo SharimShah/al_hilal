@@ -9,11 +9,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useModal } from "@/context/LocationContext";
 import { useCart } from "@/context/CartContext";
-function Navbar({ data, bdata }) {
+import { siteNumber } from "@/domain/domain";
+function Navbar({ data }) {
+  const { toggleCart, opencart } = useCart();
   const { setIsModalVisible } = useModal();
-  const { selectedOption } = useCart();
   const [open, setOpen] = useState(false);
-  const [opencart, setOpencart] = useState(false);
   const ref = useRef(null);
   // Control body scroll on sidebar open
   useEffect(() => {
@@ -28,7 +28,6 @@ function Navbar({ data, bdata }) {
     setOpencart(false);
   });
 
-  const toggleCart = () => setOpencart((prev) => !prev);
   const toggleSidebar = () => setOpen((prev) => !prev);
   const handleEditClick = () => {
     setIsModalVisible(true);
@@ -37,7 +36,7 @@ function Navbar({ data, bdata }) {
     <>
       <div className="container-fluid p-0 max-[380px]:p-0 md:my-5">
         <header className="flex py-2 px-2 sm:px-10 min-h-[70px] tracking-wide relative z-50 ">
-          <div className="flex flex-wrap items-center justify-between gap-4 w-full">
+          <div className="md:flex md:flex-wrap md:items-center md:gap-4 w-full">
             <Link
               href="/"
               className="lg:absolute max-lg:left-10 lg:top-2/4 lg:left-2/4 lg:-translate-x-1/2 lg:-translate-y-1/2"
@@ -46,9 +45,9 @@ function Navbar({ data, bdata }) {
                 priority={true}
                 height={200}
                 width={300}
-                src="/images/kcglogo.png"
+                src="/images/logo.png"
                 alt="logo"
-                className="w-[157px] max-h-[60px] sm:w-[210px] lg:w-[260px] object-contain"
+                className="w-[100px] max-h-[100px] lg:w-[260px] object-contain mx-auto"
               />
             </Link>
             <div
@@ -71,15 +70,9 @@ function Navbar({ data, bdata }) {
 
               <ul className="lg:flex lg:gap-x-5 max-lg:space-y-3 max-lg:fixed max-lg:bg-white max-lg:w-1/2 max-lg:min-w-[300px] max-lg:top-0 max-lg:left-0 max-lg:p-6 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto z-50 items-center">
                 <li className="max-lg:border-b max-lg:py-3 px-3">
-                  <div className="md:block hidden">
-                    <button
-                      className="btn-red flex items-center gap-2 w-full justify-center text-[12px] md:text-sm px-2"
-                      onClick={handleEditClick}
-                    >
-                      <IoLocation />
-                      {!selectedOption ? "Select Location" : "Change Location"}
-                    </button>
-                  </div>
+                  <p className="text-kcred text-lg font-bold hover:underline cursor-pointer">
+                    {siteNumber}
+                  </p>
                 </li>
               </ul>
             </div>
@@ -87,19 +80,19 @@ function Navbar({ data, bdata }) {
             <div className="flex items-center ml-auto space-x-6">
               {/* Responsive Button for small screens */}
               <Link
-                href="/submit-your-complaint"
+                href="#"
                 className="btn-red flex items-center gap-2 hidden lg:block md:block"
               >
                 Submit Your Complaint
               </Link>
-              <div className="relative lg:hidden md:hidden">
+              {/* <div className="relative lg:hidden md:hidden">
                 <button
                   className="flex items-center gap-2"
                   onClick={handleEditClick}
                 >
                   <IoLocation className="text-[30px] text-kcred" />
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </header>

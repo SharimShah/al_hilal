@@ -8,19 +8,20 @@ import { useCart } from "@/context/CartContext";
 import Emptycart from "./Emptycart";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import AreaSelect from "./AreaSelect";
 import PopularItemsSwiper from "./PopularItemsSwiper";
 
 const YourCart = ({ toggleSidebar, open, ref, data }) => {
-  const { cart, isAllowedTime, selectedOption } = useCart();
+  const { cart, isAllowedTime } = useCart();
   const [Cheakbtn, setCheakbtn] = useState(false);
+
   useEffect(() => {
-    if (selectedOption != null && isAllowedTime == true) {
+    if (isAllowedTime == true) {
       setCheakbtn(true);
     } else {
       setCheakbtn(false);
     }
-  }, [selectedOption, isAllowedTime]);
+  }, [isAllowedTime]);
+
   return (
     <>
       <AnimatePresence mode="wait" initial={false}>
@@ -81,9 +82,6 @@ const YourCart = ({ toggleSidebar, open, ref, data }) => {
                 </motion.div>
                 <motion.div {...framerText(7)}>
                   <TotalPrices />
-                </motion.div>
-                <motion.div {...framerText(8)}>
-                  <AreaSelect />
                 </motion.div>
                 <div className="px-4 pb-6 mt-4">
                   {Cheakbtn ? (
@@ -153,16 +151,5 @@ const framerText = (delay) => {
       delay: 0.5 + delay / 10,
     },
   };
-};
-
-const framerIcon = {
-  initial: { scale: 0 },
-  animate: { scale: 1 },
-  transition: {
-    type: "spring",
-    stiffness: 260,
-    damping: 20,
-    delay: 1.5,
-  },
 };
 export default YourCart;

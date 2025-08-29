@@ -1,31 +1,79 @@
 "use client";
-import ScrollSpy from "@/lib/ScrollSpy";
-export default function ScrollspyMenu({ MSdata }) {
+import { useRef } from "react";
+import { Link } from "react-scroll";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa"; // React Icons for arrows
+
+export default function ScrollspyMenu({ categories }) {
+  const categoryRefs = useRef({});
+  const scrollContainerRef = useRef(null);
+
+  // Scroll to specific category
+  const scrollToCategory = (id) => {
+    const element = categoryRefs.current[id];
+    if (element) {
+      element.scrollIntoView({
+        inline: "center",
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  };
+
+  // Scroll menu left or right
+  const scrollMenu = (direction) => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 200; // Adjust scroll distance
+      scrollContainerRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
-    <div
-      className={`sticky top-0 z-50 px-4 bg-white shadow-lg h-[60px] flex items-center transition-transform duration-300 ease-in-out`}
-      style={{ whiteSpace: "nowrap" }}
-    >
-      <ScrollSpy
-        activeclassName="text-white bg-kcred transition-all duration-200"
-        offsetTop={80}
-        rootMargin="-60px 0px 0px 0px"
-        behavior="smooth"
-      >
-        <nav className="w-full">
-          <ul className="flex items-center justify-center">
-            {MSdata?.map((item, i) => (
-              <a
-                key={i}
-                href={`#section-a${i}`}
-                className={`text-[15px] text-black font-semibold rounded sm:px-5 px-2 py-2 transition-all duration-200`}
+    <div className="bg-kcred sticky top-0">
+      <div className="kcgcontainer bg-kcred w-full relative flex items-center">
+        {/* Left Arrow */}
+        <button
+          className="md:block mr-5 px-5 h-full hidden absolute left-0 z-10 p-2 bg-kcred text-black hover:text-gray-300 active:bg-kcredlight active:scale-95 transition-transform duration-150"
+          onClick={() => scrollMenu("left")}
+        >
+          <FaChevronLeft size={10} />
+        </button>
+        {/* Scrollable Menu */}
+        <ul
+          ref={scrollContainerRef}
+          className="scrollbar-none flex overflow-x-auto whitespace-nowrap list-none flex-nowrap justify-start scroll-smooth"
+        >
+          {categories.map((category) => (
+            <li
+              className="inline-block m-[15px]"
+              key={category?.id}
+              ref={(el) => (categoryRefs.current[category?.id] = el)}
+            >
+              <Link
+                activeClass="activeCategoryLink"
+                className={`${category?.id} cursor-pointer font-[600] tracking-wider text-[14px]`}
+                to={`section-a${category?.id}`}
+                spy={true}
+                smooth={true}
+                duration={500}
+                offset={-50}
+                onSetActive={() => scrollToCategory(category?.id)}
               >
-                {item.name}
-              </a>
-            ))}
-          </ul>
-        </nav>
-      </ScrollSpy>
+                {category?.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        {/* Right Arrow */}
+        <button
+          className="md:block ml-5 px-5 h-full hidden absolute right-0 z-10 p-2 bg-kcred text-black hover:text-gray-300 active:bg-kcredlight active:scale-95 transition-transform duration-150"
+          onClick={() => scrollMenu("right")}
+        >
+          <FaChevronRight size={10} />
+        </button>
+      </div>
     </div>
   );
 }

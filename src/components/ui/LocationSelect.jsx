@@ -1,6 +1,6 @@
 "use client";
 import { useModal } from "@/context/LocationContext";
-import RestaurantOrder from "./RestaurantOrder";
+// import RestaurantOrder from "./RestaurantOrder";
 export default function LocationSelect() {
   const { isModalVisible, setIsModalVisible } = useModal();
   return (
@@ -16,7 +16,7 @@ export default function LocationSelect() {
           onClick={(e) => e.stopPropagation()}
           className="relative bg-white p-4 rounded-lg shadow-lg md:w-[600px] w-full h-full m-auto"
         >
-          <RestaurantOrder setIsModalVisible={setIsModalVisible} />
+          {/* <RestaurantOrder setIsModalVisible={setIsModalVisible} /> */}
         </div>
       </div>
       {/* )} */}

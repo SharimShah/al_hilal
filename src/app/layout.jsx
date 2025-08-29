@@ -1,39 +1,15 @@
+import "../styles/globals.css";
+import { Archivo, Poppins } from "next/font/google";
 import { ModalProvider } from "@/context/ModalContext";
 import { CartProvider } from "@/context/CartContext";
-import localFont from "next/font/local";
-import "../styles/globals.css";
 import { SpringModal } from "@/components/ui/SpringModal";
 import { fullUrl } from "@/data/data";
 import NextTopLoader from "nextjs-toploader";
-import { GoogleTagManager } from "@next/third-parties/google";
+// import { GoogleTagManager } from "@next/third-parties/google";
 import WhatsappBtn from "@/components/layout/WhatsappBtn";
 import { LocationProvider } from "@/context/LocationContext";
 import { CountryProvider } from "@/context/CountryContext";
 import LocationSelect from "@/components/ui/LocationSelect";
-const myFont = localFont({
-  src: [
-    {
-      path: "./fonts/ClashDisplay-Extralight.woff",
-      weight: "300",
-      style: "normal",
-    },
-    {
-      path: "./fonts/ClashDisplay-Medium.woff",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "./fonts/ClashDisplay-Regular.woff",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "./fonts/ClashDisplay-Bold.woff",
-      weight: "700",
-      style: "normal",
-    },
-  ],
-});
 export const metadata = {
   metadataBase: new URL(fullUrl),
   openGraph: {
@@ -49,13 +25,25 @@ export const metadata = {
     },
   },
 };
-
+const archivo = Archivo({
+  weight: "400",
+  weight: ["300", "400", "500", "600", "700", "800"],
+  subsets: ["latin"],
+  display: "swap",
+});
+const poppins = Poppins({
+  weight: "400",
+  weight: ["300", "400", "500", "600", "700", "800"],
+  subsets: ["latin"],
+  display: "swap",
+});
 export default function RootLayout({ children, modal }) {
-  const GTM = "GTM-PSXKB3TQ";
+  // const GTM = "GTM-PSXKB3TQ";
+
   return (
     <html lang="en" className="md:custom-scrollbar">
       <head>
-        <script
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `
              (function(c,l,a,r,i,t,y){
@@ -65,9 +53,9 @@ export default function RootLayout({ children, modal }) {
     })(window, document, "clarity", "script", "sktd27k6gc");
             `,
           }}
-        />
+        /> */}
         {/* Meta Pixel Code */}
-        <script
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `
               !function(f,b,e,v,n,t,s)
@@ -92,20 +80,23 @@ export default function RootLayout({ children, modal }) {
             src="https://www.facebook.com/tr?id=918432056457983&ev=
             PageView&noscript=1"
           />
-        </noscript>
+        </noscript> */}
         {/* End Meta Pixel Code */}
-        <GoogleTagManager gtmId={GTM} />
+        {/* <GoogleTagManager gtmId={GTM} /> */}
       </head>
-      <body className={`${myFont.className}`} cz-shortcut-listen="true">
+      <body
+        className={`${archivo.className} ${poppins.className}`}
+        cz-shortcut-listen="true"
+      >
         {/* <!-- Google Tag Manager (noscript) --> */}
-        <noscript>
+        {/* <noscript>
           <iframe
             src={`https://www.googletagmanager.com/ns.html?id=${GTM}`}
             height="1"
             width="1"
             style={{ display: "none" }}
           ></iframe>
-        </noscript>
+        </noscript> */}
         {/* <!-- End Google Tag Manager (noscript) --> */}
 
         <CountryProvider>
@@ -119,7 +110,7 @@ export default function RootLayout({ children, modal }) {
                 showSpinner={false}
                 easing="ease"
                 speed={200}
-                shadow="0 0 10px #e2212d,0 0 5px #e2212d"
+                shadow="0 0 10px #000000,0 0 5px #000000"
                 template='<div class="bar" role="bar"><div class="peg"></div></div> 
   <div class="spinner" role="spinner"><div class="spinner-icon"></div></div>'
                 zIndex={1600}

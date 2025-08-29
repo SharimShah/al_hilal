@@ -1,19 +1,25 @@
 "use client";
-import { createContext, useContext, useState, useEffect } from "react";
-import { deliveryLocations as locationStrings } from "@/data/SelectBraArea";
-import toast, { Toaster } from "react-hot-toast";
-const CartContext = createContext();
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+} from "react";
+import { useClickAway } from "react-use";
+// Create the context for Cart
+const CartContext = createContext(undefined);
+// CartProvider component that manages cart state and localStorage
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
-  const [selectedOption, setSelectedOption] = useState(null);
-  console.log(selectedOption, "contextselectedOption");
   const [isAllowedTime, setIsAllowedTime] = useState(false);
-  // Convert string array to select options
-  const deliveryOptions = locationStrings.map((loc) => ({
-    label: loc,
-    value: loc,
-  }));
-
+  const ref = useRef(null);
+  const [token, setToken] = useState("");
+  const [cart, setCart] = useState([]);
+  const [opencart, setOpencart] = useState(false);
+  useClickAway(ref, () => {
+    setOpencart(false);
+  });
+  const toggleCart = () => setOpencart((prev) => !prev);
   useEffect(() => {
     const now = new Date();
     const hour = now.getHours();
@@ -31,26 +37,18 @@ export const CartProvider = ({ children }) => {
     }
   }, []);
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem("selectedDeliveryLocation");
-      if (saved) {
-        setSelectedOption(JSON.parse(saved));
-      }
-    } catch (err) {
-      console.error("Failed to parse localStorage value:", err);
-    }
+    const timer = setTimeout(() => {
+      const storedToken = localStorage.getItem("customization_token");
+      setToken(storedToken);
+    }, 3000);
+    return () => clearTimeout(timer); // Cleanup in case the component unmounts early
   }, []);
   useEffect(() => {
-    const saved = localStorage.getItem("selectedDeliveryLocation");
     const savedCart = localStorage.getItem("cart");
     const savedTime = localStorage.getItem("cartTimestamp");
-    if (saved) {
-      setSelectedOption(JSON.parse(saved));
-    }
     if (savedCart && savedTime) {
       const currentTime = Date.now();
-      const timeElapsed = currentTime - parseInt(savedTime);
-
+      const timeElapsed = currentTime - parseInt(savedTime, 10);
       if (timeElapsed > 24 * 60 * 60 * 1000) {
         localStorage.removeItem("cart");
         localStorage.removeItem("cartTimestamp");
@@ -70,121 +68,76 @@ export const CartProvider = ({ children }) => {
     }
   }, [cart]);
 
-  const areOptionsEqual = (optionsA, optionsB) => {
-    if (optionsA.length !== optionsB.length) return false;
-
-    const sortedA = [...optionsA].sort(
-      (a, b) => a.modifier_option_id - b.modifier_option_id
-    );
-    const sortedB = [...optionsB].sort(
-      (a, b) => a.modifier_option_id - b.modifier_option_id
-    );
-
-    return sortedA.every(
-      (opt, i) => opt.modifier_option_id === sortedB[i].modifier_option_id
-    );
-  };
-
   const addToCart = (item) => {
-    let isNewItem = false;
-
     setCart((prevCart) => {
       const existingItem = prevCart.find(
-        (cartItem) =>
-          cartItem.id === item.id &&
-          areOptionsEqual(cartItem.order.options, item.order.options)
+        (cartItem) => cartItem.fake_id === item.fake_id
       );
 
       if (existingItem) {
         return prevCart.map((cartItem) =>
-          cartItem.id === item.id &&
-          areOptionsEqual(cartItem.order.options, item.order.options)
+          cartItem.fake_id === item.fake_id
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
       } else {
-        isNewItem = true;
         return [...prevCart, { ...item, quantity: 1 }];
       }
     });
-
-    // Toast only once
-    setTimeout(() => {
-      if (isNewItem) {
-        toast.success("Item added to cart");
-      } else {
-        toast.success("Item quantity updated in cart");
-      }
-    }, 0);
   };
-  const DlocationHandle = ({ locationData }) => {
-    localStorage.setItem(
-      "selectedDeliveryLocation",
-      JSON.stringify(locationData)
-    );
-    setSelectedOption(locationData);
-  };
-  const updateModifiers = (item, updatedOptions, newPrice) => {
+  const updatePrice = (item) => {
     setCart((prevCart) =>
       prevCart.map((cartItem) =>
-        cartItem.id === item.id &&
-        areOptionsEqual(cartItem.order.options, item.order.options)
-          ? {
-              ...cartItem,
-              order: {
-                ...cartItem.order,
-                options: updatedOptions,
-                unit_price: newPrice,
-                total_price: newPrice,
-              },
-            }
+        cartItem.fake_id === item.fake_id
+          ? { ...cartItem, price: item.price }
           : cartItem
       )
     );
-    if (updatedOptions) {
-      toast.success("Updated Cart");
-    }
   };
-
-  const removeFromCart = (itemId, q) => {
-    setCart((prevCart) => {
-      const updatedCart = prevCart
+  const removeFromCart = (itemId) => {
+    setCart((prevCart) =>
+      prevCart
         .map((item) =>
-          item.id === itemId ? { ...item, quantity: item.quantity - 1 } : item
+          item.fake_id === itemId
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
         )
-        .filter((item) => item.quantity > 0);
-      // Show toast if this action removes the last item
-
-      return updatedCart;
-    });
-    if (q === 1) {
-      toast.error("Cart Removed");
-    }
+        .filter((item) => item.quantity > 0)
+    );
   };
 
-  const grandTotal = cart.reduce(
-    (total, item) => total + item.order.total_price * item.quantity,
-    0
-  );
+  const grandTotal = cart.reduce((total, item) => {
+    const numericPrice = parseFloat(item.price.replace(/,/g, ""));
+    return total + numericPrice * item.quantity;
+  }, 0);
+  const formattedTotal = grandTotal.toLocaleString();
 
   return (
     <CartContext.Provider
       value={{
-        cart,
         addToCart,
         removeFromCart,
-        updateModifiers,
-        DlocationHandle,
+        updatePrice,
+        toggleCart,
+        setCart,
+        cart,
+        token,
+        opencart,
         grandTotal,
+        formattedTotal,
         isAllowedTime,
-        selectedOption,
-        deliveryOptions,
       }}
     >
-      <Toaster position="top-center" reverseOrder={false} />
       {children}
     </CartContext.Provider>
   );
 };
 
-export const useCart = () => useContext(CartContext);
+// Custom hook to use the Cart context
+export const useCart = () => {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error("useCart must be used within a CartProvider");
+  }
+  return context;
+};

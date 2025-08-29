@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 declare function ScrollSpy(props: {
   /**
@@ -33,7 +33,7 @@ declare function ScrollSpy(props: {
    * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTo#options
    * @default 'smooth'
    */
-  behavior?: 'smooth' | 'instant' | 'auto';
+  behavior?: "smooth" | "instant" | "auto";
 
   /**
    * Root element for the intersection observer.
@@ -68,7 +68,7 @@ declare function ScrollSpy(props: {
     internalClickHandler: () => void,
 
     /** Container element that is being scrolled */
-    container: HTMLElement,
+    container: HTMLElement
   ) => void;
 
   /** Callback function for handle the active element change event */
@@ -77,7 +77,7 @@ declare function ScrollSpy(props: {
     currentId: string | null,
 
     /** The id of previous active element */
-    prevId: string | null,
+    prevId: string | null
   ): void;
 
   children?: React.ReactNode;

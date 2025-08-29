@@ -3,10 +3,10 @@ import Link from "next/link";
 export default function SideBarCard({ item }) {
   return (
     <>
-      <Link href={`/product/${item?.id}`} scroll={false} className="p-2">
+      <Link href={`/product/${item?.slug}`} scroll={false} className="p-2">
         <div className="border-2 border-[#bbbbbb] rounded-lg relative overflow-hidden">
           <Image
-            src={item?.image || "/images/noimg.jpg"}
+            src={item?.cover_image || "/images/noimg.jpg"}
             alt={item?.name}
             width={200}
             height={200}
@@ -19,7 +19,7 @@ export default function SideBarCard({ item }) {
         <p className="text-sm font-medium text-gray-700 mt-1">
           AED. {item?.price}
         </p>
-        <p className="text-sm text-gray-600 line-clamp-1">{item.name}</p>
+        <p className="text-sm text-gray-600 line-clamp-1">{item?.name}</p>
       </Link>
     </>
   );

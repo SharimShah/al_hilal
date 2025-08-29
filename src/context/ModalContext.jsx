@@ -15,7 +15,6 @@ export const ModalProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const [modalSize, setModalSize] = useState("large"); // Default size
-  const [showSideDrawer, setshowSideDrawer] = useState(false);
   const openModal = (content, size = "large") => {
     setModalContent(content); // Set content to be displayed in the modal
     setModalSize(size); // Set the size of the modal

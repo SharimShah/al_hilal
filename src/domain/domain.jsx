@@ -1,0 +1,13 @@
+export const ApiUrl = "http://localhost:8000";
+export const fullUrl = "https://alhilalrestaurant.com";
+export const domain = "alhilalrestaurant.com";
+export const Address = "";
+export const siteName = "";
+export const siteEmail = "";
+export const siteNumber = "+921 12312371212";
+export const facbook = "";
+export const insta = "";
+export const youtube = "";
+export const pinterest = "";
+export const tiktok = "";
+export const linkedin = "";

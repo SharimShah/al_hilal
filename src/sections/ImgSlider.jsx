@@ -2,15 +2,7 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import Image from "next/image";
-export default function ImgSlider() {
-  const imagessrc = [
-    { img: "/images/banners/1.png" },
-    { img: "/images/banners/2.png" },
-    { img: "/images/banners/3.png" },
-    { img: "/images/banners/4.png" },
-    { img: "/images/banners/5.png" },
-    { img: "/images/banners/6.png" },
-  ];
+export default function ImgSlider({ images_slider }) {
   return (
     <>
       <div className="container-fluid p-0">
@@ -29,15 +21,15 @@ export default function ImgSlider() {
           modules={[Autoplay, Pagination, Navigation]}
           className="mySwiper"
         >
-          {imagessrc.map((item, i) => (
+          {images_slider?.map((item, i) => (
             <SwiperSlide key={i}>
               <Image
                 {...(i === 0 ? { priority: true } : { loading: "lazy" })}
-                src={item?.img}
+                src={item?.image || "/images/noimg.jpg"}
                 width={1600}
                 alt=""
                 height={600}
-                className="w-full"
+                className="w-full md:h-[500px] object-cover"
               />
             </SwiperSlide>
           ))}

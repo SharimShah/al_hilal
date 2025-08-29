@@ -1,0 +1,10 @@
+User-agent: Googlebot
+Disallow: /private/
+Disallow: /search
+Disallow: /checkout
+Disallow: /thank-you
+Disallow: /_next/static/
+User-agent: *
+Allow: /
+
+Sitemap: https://giftsaura.com/sitemap.xml

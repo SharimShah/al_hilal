@@ -8,7 +8,7 @@ export default function ViewCart({ toggleCart }) {
   return (
     <>
       {totalQuantity ? (
-        <div className="fixed bottom-0 w-full z-[100] lg:hidden">
+        <div className="fixed bottom-0 w-full z-[100]">
           <div className="bg-white w-full sm:max-w-[400px] mx-auto rounded-t-lg p-2 sm:p-0 shadow-lg">
             <div
               onClick={toggleCart}
@@ -27,7 +27,7 @@ export default function ViewCart({ toggleCart }) {
 
               {/* Price */}
               <div className="text-white font-medium text-base text-right">
-                AED : {grandTotal}
+                AED : {grandTotal.toLocaleString()}
               </div>
             </div>
           </div>

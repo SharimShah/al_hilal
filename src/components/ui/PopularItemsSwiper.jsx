@@ -31,7 +31,7 @@ export default function PopularItemsSwiper({ data }) {
         slidesPerView={2}
       >
         {data?.map((item) => (
-          <SwiperSlide key={item.id} className="max-h-[200px]">
+          <SwiperSlide key={item.id} className="max-h-[230px]">
             <SideBarCard item={item} />
           </SwiperSlide>
         ))}

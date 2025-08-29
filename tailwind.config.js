@@ -9,8 +9,12 @@ module.exports = {
   ],
   theme: {
     extend: {
+      boxShadow: {
+        equal: "0 4px 6px rgba(0, 0, 0, 0.1)", // Example custom shadow
+      },
       colors: {
         kcred: "var(--kcred)",
+        kcgreen: "var(--kcgreen)",
         kcredlight: "var(--kcredlight)",
         scrollbarbac: "var(--scrollbarbac)",
         cyellow: "var(--cyellow)",

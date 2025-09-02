@@ -18,7 +18,7 @@ export default async function HomePage() {
     <>
       <Navbar data={HomeProducts[0]?.products} />
       <ImgSlider images_slider={images_slider} />
-      <ScrollspyMenu categories={categories} />
+      <ScrollspyMenu categories={HomeProducts} />
       {HomeProducts?.map((item, i) => (
         <Deals
           key={i}

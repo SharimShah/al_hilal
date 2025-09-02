@@ -10,7 +10,7 @@ export default function SideBarCard({ item }) {
             alt={item?.name}
             width={200}
             height={200}
-            className="object-contain"
+            className="object-cover"
           />
           <button className="bottom-1 right-1 absolute border border-[#bbbbbb] text-white bg-kcred hover:bg-kcredlight w-[30px] h-[30px] rounded-full text-[20px]">
             +

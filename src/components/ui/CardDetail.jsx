@@ -108,21 +108,24 @@ export default function CardDetail({ data, closeModal }) {
                     AED : {price}
                   </h2>
                 )}
-                <h2
-                  className={`text-lg font-sans text-cblack font-[500] ${
-                    discount_percentage ? "line-through opacity-60" : ""
-                  }`}
-                >
-                  AED : {discount_percentage}
-                </h2>
+                {discount_percentage === 0 && (
+                  <h2
+                    className={`text-lg font-sans text-cblack font-[500] ${
+                      discount_percentage ? "line-through opacity-60" : ""
+                    }`}
+                  >
+                    AED : {discount_percentage}
+                  </h2>
+                )}
               </div>
 
-              <p className="text-sm text-gray-600 mt-5 font-medium leading-6">
-                {description}
-              </p>
+              <div
+                className="text-sm text-gray-600 mt-3 font-medium leading-6"
+                dangerouslySetInnerHTML={{ __html: description }}
+              />
 
               {/* Special Instructions */}
-              <div className="mt-5">
+              <div className="">
                 <label
                   htmlFor="message"
                   className="text-lg font-sans text-cblack tracking-wide font-[500]"

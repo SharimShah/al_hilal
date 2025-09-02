@@ -15,12 +15,12 @@ export default function Deals({ data, name, id }) {
           <Card
             key={i}
             id={item?.id}
-            image={item?.image}
+            cover_image={item?.cover_image}
             slug={item?.slug}
             title={item?.name}
             desc={item?.description}
             price={item?.price}
-            oldPrice={900}
+            oldPrice={item?.discount_percentage}
           />
         ))}
       </div>

@@ -1,4 +1,6 @@
+import { siteNumber } from "@/domain/domain";
 import Image from "next/image";
+import Link from "next/link";
 import { FaFacebookF, FaInstagram } from "react-icons/fa";
 
 export default function Footer() {
@@ -19,15 +21,17 @@ export default function Footer() {
               />
             </div>
             <div>
-              <h2 className="font-bold text-lg text-white">Red Apple</h2>
-              <p className="mt-2 leading-relaxed text-white text-sm">
+              <h2 className="font-bold text-lg text-white">Al Hilal</h2>
+              <a
+                href="tel:+971502828588"
+                className="mt-2 leading-relaxed text-white text-sm"
+              >
                 <span className="font-semibold ">Phone: </span>
-                +9211111733
-              </p>
+                {siteNumber}
+              </a>
               <p className="mt-2 leading-relaxed text-white text-sm">
                 <span className="font-semibold ">Address: </span>
-                red apple - Tipu Sultan, Z, Rabia House Shop 1 plot 120, Block B
-                Shabbirabad, Karachi
+                12 STREET - Deira - Frij Al Murar - Dubai
               </p>
               <Image
                 src="/images/appstore.png" // 🔹 replace with your App Store badge
@@ -44,9 +48,9 @@ export default function Footer() {
         <div className="flex flex-col justify-center ">
           <h3 className="font-bold text-lg text-white">Our Timings</h3>
           <div className="">
-            <div className="flex items-center justify-between my-1">
+            <div className="my-1">
               <p className="text-white text-sm">Monday - Sunday</p>
-              <p className="text-white text-sm">01:00 PM - 02:30 AM</p>
+              <p className="text-white text-sm my-1 ">24 Hours</p>
             </div>
             <div className="flex flex-col justify-center">
               <p className="font-medium text-white mb-2">Follow Us:</p>
@@ -79,9 +83,9 @@ export default function Footer() {
       {/* Bottom Section */}
       <div className="text-center mt-10 text-sm text-gray-200">
         © 2025 Powered by{" "}
-        <a href="#" className="text-white underline hover:text-gray-200">
-          Blink Co.
-        </a>
+        <Link href="/" className="text-white underline hover:text-gray-200">
+          Al Hilal Restaurant
+        </Link>
       </div>
     </footer>
   );

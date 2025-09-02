@@ -24,8 +24,7 @@ export async function FetchData(firstparam = "", secondparam = "") {
   const apiURL = `${API_URL}/api/${firstparam}/${secondparam}`;
   try {
     const response = await fetch(apiURL, {
-      // Caching options for Next.js
-      next: { revalidate: 1000 }, // Revalidate every hour
+      cache: "no-store",
       method: "GET",
       headers: {
         Authorization: `Bearer ${API_KEY}`,

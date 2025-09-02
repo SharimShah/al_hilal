@@ -103,14 +103,14 @@ export default function RootLayout({ children, modal }) {
           <CartProvider>
             <ModalProvider>
               <NextTopLoader
-                color="#e2212d"
+                color="black"
                 initialPosition={0.08}
                 height={2}
                 crawl={true}
                 showSpinner={false}
                 easing="ease"
                 speed={200}
-                shadow="0 0 10px #000000,0 0 5px #000000"
+                shadow="0 0 10px black,0 0 5px black"
                 template='<div class="bar" role="bar"><div class="peg"></div></div> 
   <div class="spinner" role="spinner"><div class="spinner-icon"></div></div>'
                 zIndex={1600}

@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import Navbar from "@/components/layout/Navbar";
 import ImgSlider from "@/sections/ImgSlider";
 import Deals from "@/sections/Deals";

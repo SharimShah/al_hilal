@@ -15,10 +15,11 @@
   --cblack: #101a24;
   --cyellow: #ddd100;
 }
-/* body {
-  color: #f8f9fa;
-} */
+
 @layer base {
+  body {
+    @apply bg-[#F8F9FA];
+  }
   h1 {
     @apply text-2xl;
   }
@@ -33,7 +34,7 @@
     @apply text-[14px] font-semibold;
   }
   p {
-    @apply text-[15px] font-[500] tracking-wider text-[#555555];
+    @apply text-[12px] font-[500] tracking-wider text-[#555555];
   }
   li {
     @apply text-white leading-normal text-sm font-[500];

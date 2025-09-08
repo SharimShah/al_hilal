@@ -89,7 +89,7 @@ export const CartProvider = ({ children }) => {
     setCart((prevCart) =>
       prevCart.map((cartItem) =>
         cartItem.fake_id === item.fake_id
-          ? { ...cartItem, price: item.price }
+          ? { ...cartItem, total_price: item.total_price } // ✅ keep number
           : cartItem
       )
     );
@@ -107,8 +107,8 @@ export const CartProvider = ({ children }) => {
   };
 
   const grandTotal = cart.reduce((total, item) => {
-    const numericPrice = parseFloat(item.price.replace(/,/g, ""));
-    return total + numericPrice * item.quantity;
+    // const numericPrice = parseFloat(item.price.replace(/,/g, ""));
+    return total + item?.total_price || item?.price * item?.quantity;
   }, 0);
   const formattedTotal = grandTotal.toLocaleString();
 

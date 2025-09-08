@@ -8,7 +8,7 @@ import { useModal } from "@/context/ModalContext";
 export default function SliderCart({ item }) {
   const { openModal, closeModal } = useModal();
   const { cart, addToCart, removeFromCart } = useCart();
-  const { name, price, cover_image } = item;
+  const { name, total_price, cover_image } = item;
   const compo = (
     <CardDetail data={item} closeModal={closeModal} multi={false} />
   );
@@ -43,7 +43,7 @@ export default function SliderCart({ item }) {
                 </div> */}
                 <div>
                   <h2 className="text-[15px] font-sans text-kcred">
-                    AED : {price}
+                    AED : {total_price}
                   </h2>
                 </div>
               </div>

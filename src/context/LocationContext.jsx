@@ -5,7 +5,6 @@ const LocationContext = createContext();
 
 export const LocationProvider = ({ children }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  console.log(isModalVisible, "setIsModalVisible");
   return (
     <LocationContext.Provider value={{ isModalVisible, setIsModalVisible }}>
       {children}

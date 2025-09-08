@@ -292,7 +292,9 @@ const DeliveryOrder = () => {
                     <span className="line-clamp-1">
                       {getCartItemQuantity(item?.id)} x {item?.name}
                     </span>
-                    <span className="tracking-wider">AED {item?.price}</span>
+                    <span className="tracking-wider">
+                      AED {item?.total_price}
+                    </span>
                   </div>
                   <hr />
                 </>

@@ -1,16 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FaRegHeart } from "react-icons/fa";
+
 const Card = ({ cover_image, title, desc, price, oldPrice, slug }) => {
   return (
-    <Link
-      href={`/product/${slug}`}
-      scroll={false}
-      className="bg-white rounded-2xl shadow-equal md:p-2 p-1 w-full overflow-hidden"
-    >
-      <div className="flex items-start gap-2">
+    <div className="bg-white rounded-2xl shadow-equal md:p-2 p-1 w-full overflow-hidden">
+      <Link
+        className="flex items-start gap-2"
+        href={`/product/${slug}`}
+        scroll={false}
+      >
         {/* Deal Image */}
-        <div className="w-32 h-w-32 min-w-[7rem]">
+        <div
+          href={`/product/${slug}`}
+          scroll={false}
+          className="w-32 h-32 min-w-[7rem]"
+        >
           <Image
             width={300}
             height={300}
@@ -21,25 +26,29 @@ const Card = ({ cover_image, title, desc, price, oldPrice, slug }) => {
         </div>
 
         {/* Deal Text Content */}
-        <div className="flex-1">
-          <h2 className="text-base font-semibold text-gray-900 line-clamp-1">
+        <div className="grid gap-1 flex-1">
+          <h2 className="text-base font-semibold text-gray-900 line-clamp-1 hover:underline">
             {title}
           </h2>
+
           <div
-            className="text-sm text-gray-500 line-clamp-2"
+            className="!text-[12px] text-gray-500 line-clamp-2"
             dangerouslySetInnerHTML={{ __html: desc }}
           />
+
+          {/* Price */}
           <div className="mt-1">
             <p className="text-kcgreen font-bold text-sm">
-              AED {price}{" "}
-              {oldPrice === 0 && (
-                <span className="text-gray-400 line-through text-sm font-normal">
-                  {oldPrice}
+              AED {price}
+              {oldPrice && oldPrice > price && (
+                <span className="ml-2 text-gray-400 line-through text-sm font-normal">
+                  AED {oldPrice}
                 </span>
               )}
             </p>
           </div>
 
+          {/* Actions */}
           <div className="flex justify-between items-center mt-1">
             <button className="text-kcgreen font-semibold text-[16px] hover:underline">
               Add To Cart
@@ -47,8 +56,8 @@ const Card = ({ cover_image, title, desc, price, oldPrice, slug }) => {
             <FaRegHeart className="text-gray-400 text-lg cursor-pointer hover:text-red-500 transition" />
           </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 };
 

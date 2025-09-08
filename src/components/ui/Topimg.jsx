@@ -5,7 +5,7 @@ export default function Topimg() {
   return (
     <>
       <div className=" bg-back-img bg-cover fixed w-full h-screen top-0 -z-50"></div>
-      <Image
+      <img
         src="https://kababjeesfriedchicken.com/assets/images/kababbjeesfriedchicken/top-image.webp"
         width={2000}
         height={10}

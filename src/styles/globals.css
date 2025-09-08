@@ -7,6 +7,7 @@
 @import "swiper/css/thumbs";
 @import "swiper/css/free-mode";
 @import "react-international-phone/style.css";
+
 :root {
   --kcred: #da291c;
   --kcredlight: #c41a24;
@@ -16,10 +17,13 @@
   --cyellow: #ddd100;
 }
 
+body {
+  background-image: url("/images/dfgh.jpg");
+  background-repeat: repeat;
+  background-size: contain;
+  background-attachment: fixed;
+}
 @layer base {
-  body {
-    @apply bg-[#F8F9FA];
-  }
   h1 {
     @apply text-2xl;
   }
@@ -57,7 +61,7 @@
     @apply max-w-[1000px] px-[3rem];
   }
   .kcgcontainer {
-    @apply max-w-[1170px] mx-auto lg:px-10 md:px-10 sm:px-6 px-4;
+    @apply max-w-[1250px] mx-auto lg:px-10 md:px-10 sm:px-6 px-4;
   }
 }
 @layer utilities {

@@ -89,8 +89,8 @@ const DeliveryOrder = () => {
           </div>
         </div>
       ) : null}
-      <div className="min-h-screen bg-white flex items-center justify-center px-2">
-        <div className="w-full max-w-6xl bg-[#F7F7F7] rounded-lg shadow-md flex flex-col md:flex-row">
+      <div className="min-h-screen flex items-center justify-center px-2">
+        <div className="w-full max-w-6xl bg-white rounded-lg shadow-md flex flex-col md:flex-row">
           {/* Left Section */}
           <div className="w-full md:w-[60%] p-5 border-r border-gray-300">
             <h2 className="text-xl font-medium">

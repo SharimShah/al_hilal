@@ -25,6 +25,7 @@ export default async function HomePage() {
           data={item?.products}
           id={`section-a${item?.id}`}
           name={item?.name}
+          image={item?.image}
         />
       ))}
       <Footer />

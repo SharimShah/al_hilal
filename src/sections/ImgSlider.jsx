@@ -29,7 +29,7 @@ export default function ImgSlider({ images_slider }) {
                 width={1600}
                 alt=""
                 height={600}
-                className="w-full md:h-[500px] object-cover"
+                className="w-full"
               />
             </SwiperSlide>
           ))}

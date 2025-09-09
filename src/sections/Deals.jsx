@@ -1,13 +1,24 @@
 import Card from "@/components/ui/Card";
-export default function Deals({ data, name, id }) {
+import Image from "next/image";
+export default function Deals({ data, name, image, id }) {
   return (
     <div className="py-10 px-4 sm:px-6 lg:px-12 kcgcontainer" id={id}>
       {/* Header Banner */}
-      <div className="bg-kcgreen rounded-xl text-white text-center md:py-20 py-10 md:mb-12 mb-5">
-        <h1 className="text-2xl md:text-5xl font-semibold tracking-wide capitalize">
-          {name}
-        </h1>
-      </div>
+      {image !== null ? (
+        <Image
+          src={image}
+          width={1400}
+          alt=""
+          className="object-contain w-full my-10"
+          height={50}
+        />
+      ) : (
+        <div className="bg-kcgreen rounded-xl text-white text-center md:py-20 py-10 md:mb-12 mb-5">
+          <h1 className="text-2xl md:text-5xl font-semibold tracking-wide capitalize">
+            {name}
+          </h1>
+        </div>
+      )}
 
       {/* Deal Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">

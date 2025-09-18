@@ -20,6 +20,12 @@ export default function SliderCart({ item }) {
     const cartItem = cart.find((item) => item.fake_id === itemId);
     return cartItem ? cartItem.quantity : 0;
   };
+  const quantity = getCartItemQuantity(item.fake_id);
+  const Removehandle = () => {
+    removeFromCart(item?.fake_id, getCartItemQuantity(item?.fake_id));
+    localStorage.removeItem(`c_variations_${item?.fake_id}`);
+  };
+  const showing_price = item?.total_price * (quantity || 1);
   return (
     <>
       <div className="grid grid-cols-1">
@@ -43,22 +49,17 @@ export default function SliderCart({ item }) {
                 </div> */}
                 <div>
                   <h2 className="text-[15px] font-sans text-kcred">
-                    AED : {total_price}
+                    AED : {showing_price}
                   </h2>
                 </div>
               </div>
             </div>
-            {getCartItemQuantity(item?.fake_id) > 0 ? (
+            {quantity > 0 ? (
               <div className="flex items-center justify-center border border-red-500 rounded-full p-1 w-[40%] mx-auto">
                 <AddCounter
-                  minus={() =>
-                    removeFromCart(
-                      item?.fake_id,
-                      getCartItemQuantity(item?.fake_id)
-                    )
-                  }
+                  minus={() => Removehandle()}
                   plus={() => addToCart(item)}
-                  Quantity={getCartItemQuantity(item?.fake_id)}
+                  Quantity={quantity}
                 />
               </div>
             ) : (

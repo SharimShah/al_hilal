@@ -31,7 +31,7 @@ export default function ScrollspyMenu({ categories }) {
   };
 
   return (
-    <div className="bg-kcred sticky top-0">
+    <div className="bg-kcred sticky top-0 z-20">
       <div className="kcgcontainer bg-kcred w-full relative flex items-center">
         {/* Left Arrow */}
         <button
@@ -43,7 +43,7 @@ export default function ScrollspyMenu({ categories }) {
         {/* Scrollable Menu */}
         <ul
           ref={scrollContainerRef}
-          className="scrollbar-none flex overflow-x-auto whitespace-nowrap list-none flex-nowrap justify-start scroll-smooth"
+          className="md:scrollbar-none flex overflow-x-auto whitespace-nowrap list-none flex-nowrap justify-start scroll-smooth"
         >
           {categories.map((category) => (
             <li

@@ -9,8 +9,9 @@ import Link from "next/link";
 import { useModal } from "@/context/LocationContext";
 import { useCart } from "@/context/CartContext";
 import { siteNumber } from "@/domain/domain";
+import { TiShoppingCart } from "react-icons/ti";
 function Navbar({ data }) {
-  const { toggleCart, opencart } = useCart();
+  const { toggleCart, opencart, cart } = useCart();
   const { setIsModalVisible } = useModal();
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
@@ -31,11 +32,12 @@ function Navbar({ data }) {
   const handleEditClick = () => {
     setIsModalVisible(true);
   };
+  const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
   return (
     <>
       <div className="container-fluid p-0 max-[380px]:p-0 md:my-5">
         <header className="flex py-2 px-2 sm:px-10 min-h-[70px] tracking-wide relative z-50 ">
-          <div className="md:flex md:flex-wrap md:items-center md:gap-4 w-full">
+          <div className="flex flex-wrap md:items-center md:gap-4 w-full">
             <Link
               href="/"
               className="lg:absolute max-lg:left-10 lg:top-2/4 lg:left-2/4 lg:-translate-x-1/2 lg:-translate-y-1/2"
@@ -46,7 +48,7 @@ function Navbar({ data }) {
                 width={300}
                 src="/images/logo.png"
                 alt="logo"
-                className="w-[100px] max-h-[100px] lg:w-[260px] object-contain mx-auto"
+                className="w-[100px] max-h-[100px] lg:w-[260px] object-contain"
               />
             </Link>
             <div
@@ -71,7 +73,7 @@ function Navbar({ data }) {
                 <li className="max-lg:border-b max-lg:py-3 px-3">
                   <a
                     href="tel:+971502828588"
-                    className="text-kcred text-lg font-bold hover:underline cursor-pointer"
+                    className="btn-red  text-white text-lg font-medium hover:underline cursor-pointer"
                   >
                     {siteNumber}
                   </a>
@@ -80,13 +82,27 @@ function Navbar({ data }) {
             </div>
 
             <div className="flex items-center ml-auto space-x-6">
+              <div
+                className="relative inline-block cursor-pointer"
+                aria-label="toggle sidebar"
+                onClick={toggleCart}
+              >
+                {/* Icon or Element */}
+                <div className="flex items-center justify-center">
+                  <TiShoppingCart className="text-[30px] md:text-[40px]" />
+                </div>
+                {/* Notification Badge */}
+                <span className="absolute md:top-[15px] md:right-[30px] top-[8px] right-[23px] text-[12px] leading-[12px] md:leading-4 inline-flex items-center justify-center h-5 w-5 md:text-xs font-bold text-white bg-kcred rounded-full">
+                  {totalQuantity}
+                </span>
+              </div>
               {/* Responsive Button for small screens */}
-              <Link
+              {/* <Link
                 href="#"
                 className="btn-red flex items-center gap-2 hidden lg:block md:block"
               >
                 Submit Your Complaint
-              </Link>
+              </Link> */}
               {/* <div className="relative lg:hidden md:hidden">
                 <button
                   className="flex items-center gap-2"

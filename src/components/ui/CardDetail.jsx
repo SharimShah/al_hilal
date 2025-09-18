@@ -1,171 +1,74 @@
 "use client";
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useCart } from "@/context/CartContext";
 import Image from "next/image";
 import { FaPlus, FaMinus } from "react-icons/fa6";
+import { FaArrowCircleRight } from "react-icons/fa";
 import { loadDealFromStorage, saveDealToStorage } from "../hooks/imageStorage";
 import { Toaster } from "react-hot-toast";
-import { FaArrowCircleRight } from "react-icons/fa";
+import AddCounter from "./AddCounter";
+import { useRouter } from "next/navigation";
 
-export default function CardDetail({ data, closeModal }) {
+const CardDetail = ({ data, closeModal, pagetype }) => {
   const { cart, addToCart, toggleCart, removeFromCart, updatePrice } =
     useCart();
+  const router = useRouter();
   const [refreshKey, setRefreshKey] = useState(0);
-  const [btn, setbtn] = useState("ADD TO CART");
-  const [Total_price, setTotal_price] = useState(0);
+  const [btn, setBtn] = useState("ADD TO CART");
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  // Ensure every item has a unique fake_id
   const item = useMemo(() => {
     if (data?.fake_id) return data;
-    return {
-      ...data,
-      fake_id: data?.id + Math.floor(Math.random() * 10000),
-    };
+    return { ...data, fake_id: data?.id + Math.floor(Math.random() * 10000) };
   }, [data, refreshKey]);
 
-  const getCartItemQuantity = (itemId) => {
-    const cartItem = cart.find((item) => item.fake_id === itemId);
-    return cartItem ? cartItem.quantity : 0;
-  };
-  const quantity = getCartItemQuantity(item.fake_id);
-
-  const regenerateFakeId = () => setRefreshKey((prev) => prev + 1);
-
-  const { id, name, description, price, fake_id, addons } = item;
-  console.log(addons, "addons");
+  const { name, description, price, fake_id, addons, modifiers } = item;
   const dealKey = `c_variations_${fake_id}`;
 
-  // react-hook-form
   const {
     register,
     watch,
     reset,
     control,
-    formState: { errors, isValid },
-  } = useForm({
-    mode: "onChange",
-  });
-  console.log(isValid, "isValid");
-  // Restore if already in cart
-  useEffect(() => {
-    if (quantity !== 0) {
-      setbtn("UPDATE CART");
-    } else {
-      setbtn("ADD TO CART");
-    }
-  }, [quantity, item]);
+    getValues,
+    formState: { isValid },
+  } = useForm({ mode: "onChange" });
 
-  // persist in localStorage
-  useEffect(() => {
-    if (data?.fake_id) {
-      const sub = watch((data) => {
-        saveDealToStorage(dealKey, { fields: data });
-      });
-      return () => sub.unsubscribe();
-    }
-  }, [watch, data]);
+  // Quantity from cart
+  const quantity = cart.find((c) => c.fake_id === fake_id)?.quantity || 0;
 
+  const getCartItemQuantity = (itemId) => {
+    const cartItem = cart.find((item) => item.fake_id === itemId);
+    return cartItem ? cartItem.quantity : 0;
+  };
+
+  // Change button label based on cart
+  useEffect(() => {
+    setBtn(quantity > 0 ? "UPDATE CART" : "ADD TO CART");
+  }, [quantity]);
+
+  // Persist changes to localStorage
+  useEffect(() => {
+    const sub = watch((formData) => {
+      if (Object.keys(formData).length > 0) {
+        saveDealToStorage(dealKey, { fields: formData });
+      }
+    });
+    return () => sub.unsubscribe();
+  }, [control, dealKey]);
+
+  // Restore saved form data on mount
   useEffect(() => {
     const saved = loadDealFromStorage(dealKey);
-    if (saved?.fields) {
-      reset(saved.fields);
-    }
+    if (saved?.fields) reset(saved.fields);
   }, [dealKey, reset]);
 
-  // Add to Cart
-  const handleAddToCart = () => {
-    const formData = watch();
-    const selectedModifiers = getSelectedModifiers(formData);
-    const finalItem = {
-      ...item,
-      modifiers: selectedModifiers,
-      total_price: Total_price, // always correct
-    };
+  // Helpers
+  const regenerateFakeId = () => setRefreshKey((prev) => prev + 1);
 
-    saveDealToStorage(dealKey, { fields: formData });
-
-    if (btn === "UPDATE CART") {
-      addToCart(finalItem, true);
-      closeModal();
-    } else {
-      addToCart(finalItem);
-      closeModal();
-    }
-
-    if (!data?.fake_id) {
-      toggleCart();
-      reset();
-      regenerateFakeId();
-    }
-  };
-
-  const Removehandle = () => {
-    removeFromCart(fake_id);
-    localStorage.removeItem(dealKey);
-  };
-
-  const sectionRefs = useRef([]);
-
-  const handleScrollNext = (index) => {
-    if (sectionRefs.current[index + 1]) {
-      sectionRefs.current[index + 1].scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
-  };
-
-  // // Modifier data (mock)
-  // const addon_item = [
-  //   {
-  //     sequence: 3,
-  //     subcat_name: "Quantity",
-  //     multi_option: "multiple",
-  //     require_addons: 1,
-  //     sub_item: [
-  //       {
-  //         sub_item_id: "3115330",
-  //         sub_item_name: "Sigle",
-  //         price: 0,
-  //         checked: 1,
-  //       },
-  //       { sub_item_id: "3115321", sub_item_name: "Duoble", price: 100 },
-  //     ],
-  //   },
-  //   {
-  //     sequence: 2,
-  //     subcat_name: "Select your Desserts",
-  //     multi_option: "one",
-  //     require_addons: 1,
-  //     sub_item: [
-  //       { sub_item_id: "311530", sub_item_name: "Zarda", price: 0 },
-  //       { sub_item_id: "311531", sub_item_name: "Kheer", price: 0 },
-  //     ],
-  //   },
-  //   {
-  //     subcat_id: "203072",
-  //     sequence: 6,
-  //     subcat_name: "ADD ON",
-  //     multi_option: "multiple",
-  //     require_addons: 0,
-  //     sub_item: [{ sub_item_id: "311536", sub_item_name: "Nalli", price: 200 }],
-  //   },
-  //   {
-  //     subcat_id: "203206",
-  //     sequence: 7,
-  //     subcat_name: "Soft Drink Can",
-  //     multi_option: "one",
-  //     require_addons: 1,
-  //     sub_item: [
-  //       { sub_item_id: "312009", sub_item_name: "7up Zero", price: 0 },
-  //       { sub_item_id: "312010", sub_item_name: "7up Diet", price: 0 },
-  //       { sub_item_id: "312023", sub_item_name: "Pepsi", price: 0 },
-  //       { sub_item_id: "312024", sub_item_name: "Mirinda", price: 0 },
-  //       { sub_item_id: "312025", sub_item_name: "7up", price: 0 },
-  //     ],
-  //   },
-  // ];
-
-  // Get selected modifiers based on formData
   const getSelectedModifiers = (formData) => {
     const selected = [];
     addons?.forEach((group, i) => {
@@ -176,58 +79,112 @@ export default function CardDetail({ data, closeModal }) {
         const found = group.sub_item.find(
           (s) => s.sub_item_id === selectedValue
         );
-        if (found) selected.push(found);
+        if (found) selected.push({ ...found, quantity: 1 });
       }
 
       if (group.multi_option === "multi" && Array.isArray(selectedValue)) {
-        selectedValue.forEach((id) => {
-          const found = group.sub_item.find((s) => s.sub_item_id === id);
-          if (found) selected.push(found);
+        selectedValue.forEach((sel) => {
+          const found = group.sub_item.find((s) => s.sub_item_id === sel.id);
+          if (found) selected.push({ ...found, quantity: sel.quantity });
         });
       }
     });
     return selected;
   };
 
-  // Watch formData changes (from react-hook-form)
+  // Watch selections
   const selectedFormData = watch();
   const selectedModifiers = getSelectedModifiers(selectedFormData);
 
-  // Sum modifier prices
   const modifiersPrice = selectedModifiers.reduce(
-    (sum, mod) => sum + Number(mod.price),
+    (sum, mod) => sum + Number(mod.price) * (mod.quantity || 1),
     0
   );
-
-  // Convert base price to number
   const numericPrice = Number(price);
 
-  // Update total price whenever base/modifiers/qty change
+  // Calculate modifiers total directly from cart
+  const modifiersTotal = (modifiers || []).reduce((sum, mod) => {
+    const qty = getCartItemQuantity(mod.id);
+    return sum + Number(mod.price) * qty;
+  }, 0);
+
+  // Final showing price
+  const showingPrice =
+    (numericPrice + modifiersPrice) * (quantity || 1) + modifiersTotal;
+
+  // Update total price for main item (not including separate modifiers)
   useEffect(() => {
-    const total = (numericPrice + modifiersPrice) * (quantity || 1);
+    const newTotal = numericPrice + modifiersPrice;
+    setTotalPrice(newTotal);
+    updatePrice({ fake_id, total_price: newTotal });
+  }, [numericPrice, modifiersPrice, quantity, fake_id]);
 
-    updatePrice({
+  // Add to cart (main item with addons)
+  const handleAddToCart = () => {
+    const formData = getValues();
+    const selectedModifiers = getSelectedModifiers(formData);
+
+    const finalItem = {
       ...item,
-      total_price: total, // ✅ always numeric
-    });
+      variation: selectedModifiers,
+      total_price: totalPrice,
+    };
 
-    setTotal_price(total);
-  }, [numericPrice, modifiersPrice, quantity, item]);
+    if (Object.keys(formData).length > 0) {
+      saveDealToStorage(dealKey, { fields: formData });
+    }
+
+    addToCart(finalItem, btn === "UPDATE CART");
+    closeModal();
+    if (pagetype === "modal") {
+      router.push("/");
+    }
+    if (!data?.fake_id) {
+      toggleCart();
+      reset();
+      regenerateFakeId();
+    }
+  };
+
+  // Modifier add/remove
+  const modiAddToCart = (itm) => {
+    const qty = getCartItemQuantity(itm.id) + 1;
+    const finalItem = {
+      ...itm,
+      total_price: Number(itm.price) * qty,
+      fake_id: itm.id, // use id as fake_id for modifiers
+    };
+    addToCart(finalItem);
+  };
+
+  const modiRemoveFromCart = (itm) => {
+    removeFromCart(itm.id);
+  };
+
+  // Remove main item
+  const handleRemove = () => {
+    removeFromCart(fake_id);
+    localStorage.removeItem(dealKey);
+  };
+
   const isGroupComplete = (group, formData, index) => {
     const fieldName = `addon_${index}`;
     const selectedValue = formData[fieldName];
-
-    if (!group.require_addons) return true; // not required → always complete
-
-    if (group.multi_option === "one") {
-      return Boolean(selectedValue); // must pick one
-    }
-
-    if (group.multi_option === "multiple") {
-      return Array.isArray(selectedValue) && selectedValue.length > 0; // must pick at least one
-    }
-
+    if (!group.require_addons) return true;
+    if (group.multi_option === "one") return Boolean(selectedValue);
+    if (group.multi_option === "multi")
+      return Array.isArray(selectedValue) && selectedValue.length > 0;
     return false;
+  };
+
+  const sectionRefs = useRef([]);
+  const handleScrollNext = (index) => {
+    if (sectionRefs.current[index + 1]) {
+      sectionRefs.current[index + 1].scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
   };
 
   return (
@@ -242,21 +199,21 @@ export default function CardDetail({ data, closeModal }) {
                 src={item?.cover_image}
                 width={400}
                 height={400}
-                className="object-contain w-full max-w-[300px] sm:max-w-[400px]"
-                alt="Product Image"
+                className="object-contain w-full max-w-[400px]"
+                alt={name}
               />
             )}
           </div>
 
           {/* Content */}
           <div className="lg:col-span-4 md:col-span-3 flex flex-col justify-between md:overflow-y-auto md:scrollbar-none">
-            <div className="p-5">
+            <div className="md:p-5 p-2">
               <h2 className="font-sans text-xl mb-3">{name}</h2>
 
               {/* Price */}
               <div className="flex gap-3 items-center">
                 <h2 className="text-lg font-sans text-kcred font-[500]">
-                  AED : {Total_price || price}
+                  AED : {showingPrice}
                 </h2>
               </div>
 
@@ -265,7 +222,7 @@ export default function CardDetail({ data, closeModal }) {
                 dangerouslySetInnerHTML={{ __html: description }}
               />
 
-              {/* Modifiers */}
+              {/* Addons */}
               <form className="w-full mx-auto space-y-5">
                 {addons?.map((group, i) => {
                   const isComplete = isGroupComplete(
@@ -273,14 +230,13 @@ export default function CardDetail({ data, closeModal }) {
                     selectedFormData,
                     i
                   );
-
                   return (
                     <div key={i} ref={(el) => (sectionRefs.current[i] = el)}>
                       <div className="flex justify-between items-center mb-2">
                         <h2 className="font-medium text-[15px]">
                           {group.subcat_name}
                         </h2>
-                        {group?.require_addons ? (
+                        {group.require_addons && (
                           <div
                             className={`text-white text-[12px] rounded-md py-1 px-2 ${
                               isComplete ? "bg-green-600" : "bg-red-500"
@@ -288,24 +244,20 @@ export default function CardDetail({ data, closeModal }) {
                           >
                             {isComplete ? "Completed" : "Required"}
                           </div>
-                        ) : null}
+                        )}
                       </div>
 
-                      {/* Radio (one option only) */}
+                      {/* Single choice */}
                       {group.multi_option === "one" ? (
                         <Controller
                           name={`addon_${i}`}
                           control={control}
-                          rules={{
-                            required: group.require_addons
-                              ? "This field is required"
-                              : false,
-                          }}
+                          rules={{ required: group.require_addons }}
                           defaultValue={
                             group.sub_item.find((itm) => itm.checked)
                               ?.sub_item_id || ""
                           }
-                          render={({ field, fieldState }) => (
+                          render={({ field }) => (
                             <>
                               {group.sub_item.map((itm) => (
                                 <label
@@ -339,90 +291,150 @@ export default function CardDetail({ data, closeModal }) {
                                   </span>
                                 </label>
                               ))}
-                              {fieldState.error && (
-                                <p className="text-red-500 text-sm">
-                                  {fieldState.error.message}
-                                </p>
-                              )}
                             </>
                           )}
                         />
                       ) : (
-                        // Checkbox (multiple options)
+                        // Multi choice
                         <Controller
                           name={`addon_${i}`}
                           control={control}
-                          rules={{
-                            required: group.require_addons
-                              ? "This field is required"
-                              : false,
-                          }}
                           defaultValue={
                             group.sub_item
-                              ?.filter((itm) => itm.checked === true)
-                              .map((itm) => itm.sub_item_id) || []
+                              .filter((itm) => itm.checked)
+                              .map((itm) => ({
+                                id: itm.sub_item_id,
+                                quantity: 1,
+                              })) || []
                           }
-                          render={({ field }) => (
-                            <>
-                              {group.sub_item.map((itm) => (
-                                <label
-                                  key={itm.sub_item_id}
-                                  className="flex items-center space-x-2 p-2 border-b rounded mb-2 cursor-pointer hover:bg-gray-50"
-                                >
-                                  <input
-                                    type="checkbox"
-                                    value={itm.sub_item_id}
-                                    checked={field.value.includes(
-                                      itm.sub_item_id
-                                    )}
-                                    onChange={(e) => {
-                                      const checked = e.target.checked;
-                                      let newValue = [...field.value];
-                                      if (checked) {
-                                        newValue.push(itm.sub_item_id);
-                                      } else {
-                                        newValue = newValue.filter(
-                                          (id) => id !== itm.sub_item_id
-                                        );
-                                      }
-                                      field.onChange(newValue);
-                                    }}
-                                    className="form-checkbox text-kcred"
-                                  />
-                                  <span className="text-gray-500 flex items-center gap-1">
-                                    {itm.sub_item_name}
-                                    {itm.price > 0 && (
-                                      <span className="text-gray-500 flex items-center gap-[.5]">
-                                        (+{itm.price}
-                                        <Image
-                                          src="/images/aed.webp"
-                                          alt="AED Icon"
-                                          width={20}
-                                          height={20}
-                                        />
-                                        )
-                                      </span>
-                                    )}
-                                  </span>
-                                  {/* <span className="text-gray-500">
-                                    {itm.sub_item_name}
-                                    {itm.price > 0 && (
-                                      <span className="text-gray-500">
-                                        {" "}
-                                        (+{itm.price}){" "}
-                                      </span>
-                                    )}
-                                  </span> */}
-                                </label>
-                              ))}
-                            </>
-                          )}
+                          render={({ field }) => {
+                            const value = Array.isArray(field.value)
+                              ? field.value
+                              : [];
+                            return (
+                              <>
+                                {group.sub_item.map((itm) => {
+                                  const selectedModifier = value.find(
+                                    (m) => m.id === itm.sub_item_id
+                                  );
+                                  return (
+                                    <label
+                                      key={itm.sub_item_id}
+                                      className="flex items-center gap-2 p-2 border-b rounded mb-2 cursor-pointer hover:bg-gray-50"
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        checked={!!selectedModifier}
+                                        onChange={(e) => {
+                                          let newValue = [...value];
+                                          if (e.target.checked) {
+                                            newValue.push({
+                                              id: itm.sub_item_id,
+                                              quantity: 1,
+                                            });
+                                          } else {
+                                            newValue = newValue.filter(
+                                              (m) => m.id !== itm.sub_item_id
+                                            );
+                                          }
+                                          field.onChange(newValue);
+                                        }}
+                                        className="form-checkbox text-kcred"
+                                      />
+                                      {itm.sub_item_name}
+                                      {itm.price > 0 && (
+                                        <span className="ml-1 text-gray-500">
+                                          (+{itm.price})
+                                        </span>
+                                      )}
+                                    </label>
+                                  );
+                                })}
+                              </>
+                            );
+                          }}
                         />
                       )}
                     </div>
                   );
                 })}
               </form>
+
+              {/* Extra Modifiers */}
+              {modifiers && (
+                <div>
+                  <h2 className="font-medium text-[15px] mt-5 mb-2">
+                    Modifiers
+                  </h2>
+                  {modifiers?.map((itm, i) => {
+                    const qty = getCartItemQuantity(itm.id);
+                    return (
+                      <div
+                        key={i}
+                        className="text-[12px] md:text-[16px] flex justify-between items-center space-x-2 p-2 border-b rounded mb-2 cursor-pointer hover:bg-gray-50"
+                      >
+                        {/* Label */}
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-gray-500 flex items-center gap-1 whitespace-nowrap">
+                            {itm?.cover_image && (
+                              <Image
+                                src={itm?.cover_image}
+                                width={60}
+                                height={60}
+                                alt=""
+                                className="md:w-[60px] w-[50px] md:h-[60px] h-[50px] object-cover mr-2 rounded block"
+                              />
+                            )}
+                            {itm.name}
+                            {itm.price > 0 && (
+                              <span className="text-gray-500 flex items-center gap-1 whitespace-nowrap">
+                                (+{itm.price * (qty || 1)}
+                                <Image
+                                  src="/images/aed.webp"
+                                  alt="AED Icon"
+                                  width={20}
+                                  height={20}
+                                />
+                                )
+                              </span>
+                            )}
+                          </span>
+                        </div>
+
+                        {/* Counter */}
+                        <div className="flex items-center gap-3">
+                          {qty === 0 ? (
+                            <button
+                              className="btn-red rounded-full text-[12px] w-full px-4"
+                              onClick={() => modiAddToCart(itm)}
+                            >
+                              Add +
+                            </button>
+                          ) : (
+                            <div className="flex items-center justify-center border border-red-500 rounded-full p-1 w-auto mx-auto">
+                              <AddCounter
+                                minus={() => modiRemoveFromCart(itm)}
+                                plus={() => modiAddToCart(itm)}
+                                Quantity={qty}
+                              />
+                            </div>
+                          )}
+
+                          {/* {itm?.cover_image && (
+                            <Image
+                              src={itm?.cover_image}
+                              width={60}
+                              height={60}
+                              alt=""
+                              className="w-[60px] h-[60px] object-cover rounded hidden md:block"
+                            />
+                          )} */}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
 
               {/* Special Instructions */}
               <div className="mt-6">
@@ -439,33 +451,16 @@ export default function CardDetail({ data, closeModal }) {
                   placeholder="Please enter instructions about this item..."
                 />
               </div>
-
-              {/* Live Price Summary */}
-              <div className="mt-6 p-4 border rounded bg-gray-50">
-                <h3 className="text-lg font-sans text-cblack tracking-wide font-[500] mb-2">
-                  Order Summary
-                </h3>
-                <p className="text-sm">
-                  Base Price: <b>AED {price}</b>
-                </p>
-                {selectedModifiers.map((m) => (
-                  <p key={m.sub_item_id} className="text-sm text-gray-700">
-                    {m.sub_item_name}: +AED {m.price}
-                  </p>
-                ))}
-                <hr className="my-2" />
-                <p className="font-bold text-lg">Total: AED {Total_price}</p>
-              </div>
             </div>
 
             {/* Bottom Buttons */}
-            <div className="sticky bottom-0 bg-white grid grid-cols-1 md:grid-cols-7 gap-4 items-center border-t border-gray-300 p-4 mt-5">
+            <div className="sticky md:bottom-0 bottom-[25px]  bg-white grid grid-cols-1 md:grid-cols-7 gap-4 items-center border-t border-gray-300 p-4 mt-5">
               <div className="col-span-2 md:block hidden w-full">
                 <div className="flex justify-center md:justify-start items-center gap-3">
                   <button
-                    onClick={Removehandle}
+                    onClick={handleRemove}
                     disabled={quantity === 0}
-                    className={`rounded p-2 transition duration-100 ${
+                    className={`rounded p-2 transition ${
                       quantity === 0
                         ? "bg-gray-300 cursor-not-allowed"
                         : "bg-kcred text-white hover:bg-red-600 hover:scale-110"
@@ -477,10 +472,9 @@ export default function CardDetail({ data, closeModal }) {
                   <button
                     disabled={!isValid}
                     onClick={handleAddToCart}
-                    className={`${
+                    className={`rounded p-2 transition bg-kcred text-white hover:bg-red-600 hover:scale-110 ${
                       !isValid ? "opacity-50 cursor-not-allowed" : ""
-                    }rounded p-2 transition duration-100 
-                        bg-kcred text-white hover:bg-red-600 hover:scale-110`}
+                    }`}
                   >
                     <FaPlus className="text-sm" />
                   </button>
@@ -488,13 +482,13 @@ export default function CardDetail({ data, closeModal }) {
               </div>
               <div className="md:col-span-5 w-full">
                 <button
-                  disabled={!isValid} // ✅ disable if form is NOT valid
+                  disabled={!isValid}
                   onClick={handleAddToCart}
-                  className={`${
+                  className={`rounded w-full p-3 text-[16px] font-medium transition flex justify-between bg-kcred text-white hover:bg-red-600 ${
                     !isValid ? "opacity-50 cursor-not-allowed" : ""
-                  } rounded w-full p-3 text-[16px] font-medium transition flex justify-between bg-kcred text-white hover:bg-red-600`}
+                  }`}
                 >
-                  <span>AED : {Total_price}</span>
+                  <span>AED : {showingPrice}</span>
                   <span className="flex gap-2 items-center">
                     {btn} <FaArrowCircleRight />
                   </span>
@@ -506,4 +500,6 @@ export default function CardDetail({ data, closeModal }) {
       </div>
     </>
   );
-}
+};
+
+export default CardDetail;

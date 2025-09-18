@@ -1,9 +1,13 @@
-import CheckoutTopLogo from "@/components/ui/CheckoutTopLogo";
-import DeliveryCheckout from "@/sections/DeliveryCheckout";
+import dynamic from "next/dynamic";
+
+// Dynamically imported components
+const CheckoutTopLogo = dynamic(() =>
+  import("@/components/ui/CheckoutTopLogo")
+);
+const DeliveryCheckout = dynamic(() => import("@/sections/DeliveryCheckout"));
 export const metadata = {
-  title: "Checkout | Kelly Cajun Grill Order Cajun Food Online in Dubai",
-  description:
-    "Secure and fast checkout at Kelly Cajun Grill. Review your order, choose payment, and get ready to enjoy delicious Cajun food in Dubai!",
+  title: "Checkout | Best Desi & Chinese Food in Dubai | Al Hilal Restaurant",
+  description: "",
   keywords: [""],
   robots: {
     index: false,

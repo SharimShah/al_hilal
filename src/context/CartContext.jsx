@@ -107,8 +107,7 @@ export const CartProvider = ({ children }) => {
   };
 
   const grandTotal = cart.reduce((total, item) => {
-    // const numericPrice = parseFloat(item.price.replace(/,/g, ""));
-    return total + item?.total_price || item?.price * item?.quantity;
+    return total + item?.total_price * item?.quantity;
   }, 0);
   const formattedTotal = grandTotal.toLocaleString();
 

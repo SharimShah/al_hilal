@@ -4,18 +4,14 @@ import { FaRegHeart } from "react-icons/fa";
 
 const Card = ({ cover_image, title, desc, price, oldPrice, slug }) => {
   return (
-    <div className="bg-white rounded-xl shadow-equal md:p-2 p-1 w-full overflow-hidden">
+    <div className="bg-white rounded-xl shadow-equal md:p-2 p-1.5 w-full overflow-hidden">
       <Link
         className="flex items-center gap-3"
         href={`/product/${slug}`}
         scroll={false}
       >
         {/* Deal Image */}
-        <div
-          href={`/product/${slug}`}
-          scroll={false}
-          className="w-36 h-w-36 min-w-[7rem]"
-        >
+        <div href={`/product/${slug}`} scroll={false} className="md:w-36 w-28">
           <Image
             width={300}
             height={300}

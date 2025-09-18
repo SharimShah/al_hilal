@@ -9,9 +9,10 @@ export const SpringModal = () => {
 
   // Define possible modal sizes
   const modalSizes = {
+    auto: "w-auto h-auto !bg-none",
     small: "max-w-[500px] h-[300px]",
     medium: "max-w-[750px] h-[400px]",
-    large: "max-w-[1000px] lg:h-[550px] md:h-[550px] sm:h-screen",
+    large: "max-w-[1000px] lg:h-[550px] md:h-[550px] h-[90vh] w-[90%]",
     // Add more custom sizes if needed
   };
 
@@ -19,7 +20,10 @@ export const SpringModal = () => {
   const modalSizeClass = modalSizes[modalSize] || modalSizes.large;
 
   if (!isOpen) return null; // Don't render anything if the modal is not open
-
+  const CloseModal = () => {
+    closeModal();
+    localStorage.setItem("popupClosed", "true");
+  };
   return (
     <AnimatePresence>
       {isOpen && (
@@ -27,7 +31,7 @@ export const SpringModal = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={closeModal} // Close modal when clicking outside
+          onClick={CloseModal} // Close modal when clicking outside
           className="bg-slate-900/20 backdrop-blur fixed inset-0 z-[150] grid plce-items-center overflow-hidden"
         >
           <motion.div
@@ -36,7 +40,7 @@ export const SpringModal = () => {
           >
             {/* Close Button */}
             <button
-              onClick={closeModal}
+              onClick={CloseModal}
               className="bg-kcred absolute top-3 right-3 text-lg text-white  hover:bg-black rounded-full p-1"
             >
               <RxCross2 />

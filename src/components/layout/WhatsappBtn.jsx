@@ -3,7 +3,7 @@ export default function WhatsappBtn() {
     <>
       <a
         className="hidden md:block"
-        href="https://wa.me/971503746140?text=Hi%21%20I%20want%20to%20place%20an%20order%20from%20your%20website%20.%20Can%20you%20help%20me%3F"
+        href="https://wa.me/971502828588?text=Hi%21%20I%20want%20to%20place%20an%20order%20from%20your%20website%20.%20Can%20you%20help%20me%3F"
         target="_blank"
       >
         <div className="WhatsappBtn">

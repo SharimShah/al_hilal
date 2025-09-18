@@ -36,7 +36,7 @@ const YourCart = ({ toggleSidebar, open, ref, data }) => {
             {cart.length > 0 ? (
               <motion.div
                 {...framerSidebarPanel}
-                className="fixed top-0 overflow-y-auto bottom-0 right-0 z-50 w-full h-screen max-w-sm border-r-2 border-kcred z-[130] bg-white"
+                className="fixed top-0 overflow-y-auto bottom-0 right-0 z-50 md:w-full w-[90%] h-screen max-w-sm border-r-2 border-kcred z-[130] bg-white"
                 ref={ref}
                 aria-label="Sidebar"
               >
@@ -77,9 +77,12 @@ const YourCart = ({ toggleSidebar, open, ref, data }) => {
                     </a>
                   </li>
                 </ul>
-                <motion.div {...framerText(6)}>
-                  <PopularItemsSwiper data={data} />
-                </motion.div>
+                {data && (
+                  <motion.div {...framerText(6)}>
+                    <PopularItemsSwiper data={data} />
+                  </motion.div>
+                )}
+
                 <motion.div {...framerText(7)}>
                   <TotalPrices />
                 </motion.div>
@@ -105,7 +108,7 @@ const YourCart = ({ toggleSidebar, open, ref, data }) => {
             ) : (
               <motion.div
                 {...framerSidebarPanel}
-                className="fixed top-0 overflow-y-auto bottom-0 right-0 z-50 w-full h-screen max-w-sm border-r-2 border-kcred z-[130] bg-white"
+                className="fixed top-0 overflow-y-auto bottom-0 right-0 z-50 md:w-full w-[90%] h-screen max-w-sm border-r-2 border-kcred z-[130] bg-white"
                 ref={ref}
                 aria-label="Sidebar"
               >

@@ -2,14 +2,14 @@ import Card from "@/components/ui/Card";
 import Image from "next/image";
 export default function Deals({ data, name, image, id }) {
   return (
-    <div className="py-10 px-4 sm:px-6 lg:px-12 kcgcontainer" id={id}>
+    <div className="md:my-10 my-10 px-4 sm:px-6 lg:px-12 kcgcontainer" id={id}>
       {/* Header Banner */}
       {image !== null ? (
         <Image
           src={image}
           width={1400}
           alt=""
-          className="object-contain w-full my-10"
+          className="object-contain w-full mb-9"
           height={50}
         />
       ) : (

@@ -3,23 +3,6 @@ const API_KEY = process.env.API_KEY;
 const NEXT_COUNTRY_API_KEY = process.env.NEXT_PUBLIC_COUNTRY_API_KEY;
 const CURRENT_COUNTRY_URL = `https://ipinfo.io/?token=${NEXT_COUNTRY_API_KEY}`;
 
-export async function SearchApi(q, skip = 0) {
-  const apiURL = `${API_URL}/api/search?query=${q}&limit=28&skip=${skip}`;
-  try {
-    const response = await fetch(apiURL, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${API_KEY}`,
-      },
-    });
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    return { products: [], total: 0 };
-  }
-}
-
 export async function FetchData(firstparam = "", secondparam = "") {
   const apiURL = `${API_URL}/api/${firstparam}/${secondparam}`;
   try {

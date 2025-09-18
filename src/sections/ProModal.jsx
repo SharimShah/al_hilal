@@ -33,7 +33,7 @@ export default function ProModal({ data, id, pagetype = "" }) {
       >
         <motion.div
           onClick={(e) => e.stopPropagation()} //
-          className={`m-auto bg-white text-black rounded-lg shadow-xl cursor-default relative overflow-hidden max-w-[1000px] lg:h-[550px] md:h-[550px] sm:h-screen`}
+          className={`m-auto bg-white text-black rounded-lg shadow-xl cursor-default relative overflow-hidden max-w-[1000px] lg:h-[550px] md:h-[550px] h-[95vh] w-[90%]`}
         >
           <button
             onClick={closeModal}
@@ -41,7 +41,12 @@ export default function ProModal({ data, id, pagetype = "" }) {
           >
             <RxCross2 />
           </button>
-          <CardDetail data={data} closeModal={closeModal} multi={true} />
+          <CardDetail
+            data={data}
+            closeModal={closeModal}
+            multi={true}
+            pagetype={pagetype}
+          />
         </motion.div>
       </motion.div>
     </AnimatePresence>
